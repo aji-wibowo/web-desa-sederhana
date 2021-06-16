@@ -42,6 +42,10 @@
                                                     <a href="{{ route('pelayanan_admin_tolak', ['id' => $r->id]) }}"
                                                         class="btn btn-sm btn-danger tolak">Tolak</a>
                                                 @elseif($r->status == 'Terverifikasi')
+                                                    @if ($r->pdf == null)
+                                                        <a href="{{ route('form_cetak_surat', ['type' => $r->type, 'id' => $r->id]) }}"
+                                                            class="btn btn-sm btn-success cetak">Cetak Surat</a>
+                                                    @endif
                                                     <a href="{{ route('pelayanan_admin_dapatdiambil', ['id' => $r->id]) }}"
                                                         class="btn btn-sm btn-success diambil">Dapat diambil</a>
                                                 @elseif($r->status == 'Siap Diambil')

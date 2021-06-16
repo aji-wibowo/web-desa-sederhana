@@ -46,6 +46,26 @@
                             </div>
 
                             <div class="form-group row">
+                                <label for="rw"
+                                    class="col-md-4 col-form-label text-md-right">{{ __('Rukun Warga') }}</label>
+                                <div class="col-md-6">
+                                    <select name="rw" id="rw" class="form-control @error('rw') is-invalid @enderror"
+                                        required>
+                                        <option>-Pilih Rukun Warga-</option>
+                                        @foreach ($rw as $r)
+                                            <option {{ old('rw') == $r->id ? 'selected' : '' }}
+                                                value="{{ $r->id }}">{{ $r->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('rw')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <label for="password"
                                     class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\CitizensAssociation;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\UserCitizenAssociation;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -23,6 +25,17 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        $rw = CitizensAssociation::all();
+        return view('auth.register', compact('rw'));
+    }
 
     /**
      * Where to redirect users after registration.
@@ -53,7 +66,8 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'identity_file' => 'required|mimes:jpg,png,jpeg|max:1024'
+            'identity_file' => 'required|mimes:jpg,png,jpeg|max:1024',
+            'rw' => ['required']
         ]);
     }
 
@@ -70,11 +84,20 @@ class RegisterController extends Controller
         $identityPhoto = time() . '_' . str_replace(" ", "", $data['identity_file']->getClientOriginalName());
         $identityPhotoPath = $data['identity_file']->move($destination . 'ktp', $identityPhoto);
 
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'identity_file' => $identityPhotoPath
         ]);
+
+        if ($user) {
+            UserCitizenAssociation::create([
+                'user_id' => $user->id,
+                'citizen_association_id' => $data['rw']
+            ]);
+
+            return $user;
+        }
     }
 }

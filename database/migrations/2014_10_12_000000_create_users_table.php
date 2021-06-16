@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->enum('role', ['admin', 'warga'])->default('warga');
             $table->string('identity_file')->nullable();
+            $table->enum('isVerifiedByAdmin', ['true', 'false'])->default('false');
             $table->rememberToken();
             $table->timestamps();
         });

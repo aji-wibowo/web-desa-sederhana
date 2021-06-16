@@ -7,7 +7,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h6>Daftar Data Rukun Warga (RW)</h6>
+                        <h6>Daftar Data Pengguna / Warga</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -15,7 +15,7 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Nama RW</th>
+                                        <th>Nama</th>
                                         <th>Tanggal Dibuat</th>
                                         <th>#</th>
                                     </tr>
@@ -31,6 +31,10 @@
                                                     data-email="{{ $r->email }}" data-role="{{ $r->role }}"
                                                     data-img="{{ $r->identity_file }}" class="btn btn-sm btn-info detail"
                                                     data-toggle="modal" data-target="#modalForm">detail</a>
+                                                @if ($r->isVerifiedByAdmin == 'false')
+                                                    <a href="{{ route('verif_user', ['id' => $r->id]) }}"
+                                                        class="btn btn-sm btn-success verif">verif</a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -99,12 +103,28 @@
                 var url = "#";
                 var modal = $('#modalForm');
 
-                modal.find('.modal-title').html('Tambah Rukun Warga');
+                modal.find('.modal-title').html('Detail Pengguna / Warga');
                 modal.find('#formRw').attr('action', url);
                 modal.find('input[id="name"]').val(name);
                 modal.find('input[id="email"]').val(email);
                 modal.find('input[id="role"]').val(role);
                 modal.find('#img').attr('src', "{{ url('/') }}" + "/" + img);
+            })
+            $(document).on('click', '.verif', function(e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Anda yakin ingin memverifikasi user warga ini?',
+                    text: "Anda tidak akan dapat mengubah status kembali!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: `Ya`,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        window.location = $(this).attr('href');
+                    }
+                })
             })
         })
 
