@@ -7,6 +7,7 @@ use App\Models\CitizensAssociation;
 use App\Models\Service;
 use App\Models\ServiceAttachment;
 use App\Models\User;
+use App\Models\UserCitizenAssociation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -295,11 +296,13 @@ class HomeController extends Controller
 
     public function myaccount_user()
     {
-        $data = User::where('id', Auth::user()->id)->first();
+        $data = User::with('userCitizensAssociation')->where('id', Auth::user()->id)->first();
+        $mRW = CitizensAssociation::all();
 
         $parseData = [
             'title' => 'Akun Saya',
-            'data' => $data
+            'data' => $data,
+            'mRw' => $mRW
         ];
 
         return view('profil.index', $parseData);
@@ -309,9 +312,10 @@ class HomeController extends Controller
     {
         $r->validate([
             'name' => 'required|min:3',
+            'rw' => 'required'
         ]);
 
-        $find = User::find(Auth::user()->id);
+        $find = User::with('userCitizensAssociation')->find(Auth::user()->id);
 
         if ($find == null) {
             return redirect('/myaccount')->with($this->messageSweetAlert('error', 'Gagal!', 'Data user tidak ditemukan!'));
@@ -328,6 +332,14 @@ class HomeController extends Controller
         }
 
         $find->name = $r->name;
+        if ($find->userCitizensAssociation != null) {
+            $find->userCitizensAssociation->citizen_association_id = $r->rw;
+        } else {
+            UserCitizenAssociation::create([
+                'citizen_association_id' => $r->rw,
+                'user_id' => Auth::user()->id
+            ]);
+        }
 
         if ($find->save()) {
             return redirect('/myaccount')->with($this->messageSweetAlert('success', 'Berhasil!', 'Data user Anda telah berhasil dirubah!'));

@@ -26,6 +26,16 @@
                                     readonly>
                             </div>
                             <div class="form-group">
+                                <label for="rw">RW</label>
+                                <select name="rw" id="rw" id="rw" class="form-control">
+                                    @foreach ($mRw as $rw)
+                                        <option
+                                            {{ $rw->id == isset($data->userCitizensAssociation->citizen_association_id) ? 'selected' : '' }}
+                                            value="{{ $rw->id }}">{{ $rw->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="password">Password <small style="color: red">isi bila ingin merubah
                                         password</small></label>
                                 <input type="password" id="password" name="password" class="form-control" autocomplete="off"

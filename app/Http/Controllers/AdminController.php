@@ -301,7 +301,7 @@ class AdminController extends Controller
 
         $filename = rand(1, 1000000);
 
-        Storage::put('public/pdf/' . rand(1, 1000000) . '.pdf', $pdf->output());
+        Storage::disk('public_uploads')->put('pdf/' . $filename . '.pdf', $pdf->output());
 
         $find = Service::find($id);
         $find->pdf = $filename;
@@ -333,7 +333,7 @@ class AdminController extends Controller
 
         $filename = rand(1, 1000000);
 
-        Storage::put('public/pdf/' . rand(1, 1000000) . '.pdf', $pdf->output());
+        Storage::disk('public_uploads')->put('pdf/' . $filename . '.pdf', $pdf->output());
 
         $find = Service::find($id);
         $find->pdf = $filename;
