@@ -16,6 +16,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Nama RW</th>
+                                        <th>Jumlah Warga Terdaftar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -23,6 +24,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $r->name }}</td>
+                                            <td>{{ $r->userCitizensAssociation->count() }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

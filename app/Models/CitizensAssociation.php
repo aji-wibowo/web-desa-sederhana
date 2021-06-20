@@ -12,4 +12,9 @@ class CitizensAssociation extends Model
     protected $table = 'citizens_association';
 
     protected $fillable = ['name'];
+
+    public function userCitizensAssociation()
+    {
+        return $this->hasMany('\App\Models\UserCitizenAssociation', 'citizen_association_id');
+    }
 }

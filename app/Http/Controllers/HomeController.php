@@ -284,7 +284,7 @@ class HomeController extends Controller
 
     public function rukun_warga_user()
     {
-        $data = CitizensAssociation::all();
+        $data = CitizensAssociation::with('userCitizensAssociation')->get();
 
         $parseData = [
             'title' => 'Daftar Rukun Warga Desa Situsari',
